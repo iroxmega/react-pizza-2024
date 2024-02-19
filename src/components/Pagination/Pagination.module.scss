@@ -1,0 +1,32 @@
+.paginator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2em;
+}
+
+.arrow {
+  padding: 15px;
+  border: 0px solid rgba(0,0,0, 0.2);
+
+  border-radius: 2em;
+
+  transition: all 0.15s ease-in-out;
+  &:hover {
+    border: 0px solid rgba(0,0,0, 0.7);
+    background: #ffdf8c;
+  }
+
+  &:disabled {
+    opacity: 0;
+    &:hover {
+      opacity: 0;
+    }
+  }
+}
+
+.navigation {
+  font-weight: 700;
+  font-size: 1.25em;
+
+}
