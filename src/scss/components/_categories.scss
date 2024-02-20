@@ -1,6 +1,7 @@
 @import '../variables';
 
 .categories {
+  @media (max-width: 820px) { margin-bottom: 2em;}
   ul {
     display: flex;
 
