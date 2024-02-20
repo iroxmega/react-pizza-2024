@@ -1,6 +1,12 @@
 import {useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {setSortType} from '../redux/slices/filterSlice'
 
-function Sort({selectedSort, sortChangeHandler}) {
+function Sort() {
+    //redux toolkit
+    const sortType = useSelector((state) => state.filterSlice.sortType)
+    const dispatch = useDispatch()
+
     const [isVisible, setIsVisible] = useState(false)
 
     const sorts = [
@@ -14,7 +20,7 @@ function Sort({selectedSort, sortChangeHandler}) {
 
     const sortClosing = (name, type, order) => {
         setIsVisible(isVisible => !isVisible)
-        sortChangeHandler(name, type, order)
+        dispatch(setSortType({name, type, order}))
     }
 
     return (
@@ -35,7 +41,7 @@ function Sort({selectedSort, sortChangeHandler}) {
                 <b>Сортировка по:</b>
                 <span onClick={() => {
                     setIsVisible((isVisible) => !isVisible)
-                }}>{selectedSort.name}</span>
+                }}>{sortType.name}</span>
             </div>
             {
                 isVisible &&
@@ -45,8 +51,8 @@ function Sort({selectedSort, sortChangeHandler}) {
                             <li key={i}
                                 onClick={() => sortClosing(sort.name, sort.type, sort.order)}
                                 className={
-                                    sort.type === selectedSort.type
-                                    && sort.order === selectedSort.order
+                                    sort.type === sortType.type
+                                    && sort.order === sortType.order
                                         ? 'active'
                                         : ''
                                 }>{sort.name}</li>
