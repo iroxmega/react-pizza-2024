@@ -21,14 +21,6 @@ const Main = () => {
     const [items, setItems] = useState([])
     const [isLoading, setIsLoading] = useState(true)
 
-    //backend props
-    // const [categoryId, setCategoryId] = useState(0)
-    // const [sortType, setSortType] = useState({
-    //     name: 'популярности (>)',
-    //     type: 'rating',
-    //     order: 'desc'
-    // })
-
     //pagination
     const [page, setPage] = useState(1);
     const rowsPerPage = 8;
@@ -90,16 +82,6 @@ const Main = () => {
         const prev = page - 1;
         setPage(prev > 0 ? prev : page);
     }
-
-    // const categoryChangeHandler = (id) => {
-    //     setPage(1)
-    //     setCategoryId(id)
-    // }
-
-    // const sortChangeHandler = (nam, type, order) => {
-    //     setPage(1)
-    //     setSortType({name: nam, type: type, order: order})
-    // }
 
     return (
         <div className='container'>
