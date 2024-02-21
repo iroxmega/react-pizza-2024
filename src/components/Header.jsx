@@ -1,10 +1,8 @@
 import {Link} from "react-router-dom";
 import Searchbar from "./Searchbar/Searchbar";
-import {SearchContext} from "../App";
-import {useContext} from "react";
 
 function Header() {
-    const { searchValue, setSearchValue} = useContext(SearchContext)
+
 
     return (
         <div className="header">
@@ -20,7 +18,7 @@ function Header() {
                 </Link>
 
                 {/*поведение поиска остается багнутым, он ищет по конкретной выбранной странице, а не по всей выдаче с бэка*/}
-                <Searchbar searchValue={searchValue} setSearchValue={setSearchValue}/>
+                <Searchbar />
 
                 <div className="header__cart">
                     <Link to="/cart" className="button button--cart">
