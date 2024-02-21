@@ -19,6 +19,7 @@ export const filterSlice = createSlice({
         setSortType: (state, action) => {
             const { name, type, order } = action.payload;
             state.sortType = { name, type, order };
+            state.currentPage = 1
         },
 
         setCategoryId: (state, action) => {
