@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import Categories from "../components/Categories";
 import Sort from "../components/Sort";
@@ -6,7 +6,6 @@ import PizzaSkeleton from "../components/PizzaBlock/Skeleton";
 import PizzaBlock from "../components/PizzaBlock";
 import Pizza404 from "../assets/pizza404.json"
 import Pagination from "../components/Pagination/Pagination";
-import {SearchContext} from "../App";
 import {useSelector} from 'react-redux'
 import axios from "axios";
 
@@ -15,8 +14,7 @@ const Main = () => {
     //redux toolkit logic
     const categoryId = useSelector((state) => state.filterSlice.categoryId)
     const sortType = useSelector((state) => state.filterSlice.sortType)
-
-    const {searchValue} = useContext(SearchContext)
+    const searchValue = useSelector((state) => state.filterSlice.searchValue)
 
     //pizzas data and loading status
     const [items, setItems] = useState([])
@@ -24,23 +22,29 @@ const Main = () => {
 
 
     //pagination
-    const [page, setPage] = useState(1);
+    const page = useSelector((state) => state.filterSlice.currentPage)
     const rowsPerPage = 8;
     const [itemsCount, setItemsCount] = useState(0)
 
-
-    //vars for backend queries
+    //vars for queries
     const categoryProp = categoryId > 0 ? `&category=${categoryId}` : ''
     const sortProp = `&sortBy=${sortType.type}`
     const orderProp = `&order=${sortType.order}`
     const pageLimitProp = `&p=${page}&l=${rowsPerPage}`
+    const searchQueryProp = searchValue !== '' ? `&title=${searchValue}` : ''
 
+    //сколько всего пицц в запросе, без учета пагинации
     useEffect(
         () => {
-            fetch(`https://65d099daab7beba3d5e36950.mockapi.io/pizzas?` + categoryProp)
-                .then(res => res.json())
-                .then(json => setItemsCount(Math.ceil(json.length / rowsPerPage)))
-        }, [categoryId]
+            axios.get(`https://65d099daab7beba3d5e36950.mockapi.io/pizzas?` + categoryProp + searchQueryProp)
+                .then((res) => {
+                    if (res.status === 200 && res.data) {
+                        console.log('с заданной категорий и поисковым запросом: ' + res.data.length + ' пицц')
+                        setItemsCount(res.data.length)
+                    }
+                })
+                .catch((err) => alert(err.response.data))
+        }, [categoryId, searchValue]
     )
 
 
@@ -49,12 +53,14 @@ const Main = () => {
             axios.get(
                 `https://65d099daab7beba3d5e36950.mockapi.io/pizzas?`
                 + pageLimitProp
+                + searchQueryProp
                 + categoryProp
                 + sortProp
                 + orderProp
             )
                 .then((res) => {
                     if (res.status === 200 && res.data) {
+                        console.log(`Страница: ${page}, показано пицц: ${res.data.length} из ${itemsCount}`)
                         setItems(res.data)
                         setIsLoading(false)
                     } else {
@@ -63,29 +69,12 @@ const Main = () => {
                     }
                 })
                 .catch((err) => alert(err.response.data))
-        }, [categoryId, sortType, page]
+        }, [categoryId, sortType, page, searchValue]
     )
 
-    const filteredPizzas = items.filter(
-        value => value.title.toLowerCase().includes(searchValue.toLowerCase()))
 
-    const pizzas = filteredPizzas.length !== 0
-        ? filteredPizzas.map(pizza => (<PizzaBlock {...pizza} />))
-        : <PizzaBlock {...Pizza404} />
+    const pizzas = items.map(pizza => (<PizzaBlock {...pizza} />))
     const skeletonPizzas = [...new Array(8)].map((_, i) => <PizzaSkeleton key={i}/>)
-
-
-    const handleNextPageClick = () => {
-        const next = page + 1;
-        const total = items.length !== 0 ? itemsCount : page;
-
-        setPage(next <= total ? next : page);
-    }
-
-    const handlePrevPageClick = () => {
-        const prev = page - 1;
-        setPage(prev > 0 ? prev : page);
-    }
 
 
     return (
@@ -101,15 +90,10 @@ const Main = () => {
                     : pizzas
                 }
             </div>
-
             <Pagination
-                onNextPageClick={handleNextPageClick}
-                onPrevPageClick={handlePrevPageClick}
-                disable={{
-                    left: page === 1,
-                    right: page === itemsCount,
-                }}
-                nav={{current: page, total: itemsCount}}
+                items={items} //ето например лимитные 8 пицц на 3 странице
+                itemsCount={itemsCount}
+                rowsPerPage={rowsPerPage}
             />
 
         </div>
