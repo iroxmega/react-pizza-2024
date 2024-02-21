@@ -13,7 +13,7 @@ const Pagination = ({items, itemsCount, rowsPerPage} ) => {
 
     useEffect(() => {
         setPagesCount(Math.ceil(itemsCount / rowsPerPage))
-    }, [itemsCount]);
+    }, [itemsCount, rowsPerPage]);
 
     //pag elements
     const disable = { left: currentPage === 1, right: currentPage === pagesCount,}
