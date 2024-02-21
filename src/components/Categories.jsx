@@ -7,6 +7,8 @@ function Categories() {
     const categoryId = useSelector((state) => state.filterSlice.categoryId)
     const dispatch = useDispatch()
 
+
+
     const categories = ['Все', 'Мясные', 'Вегетарианские', 'Гриль', 'Острые', 'Forbidden']
 
     return (
@@ -14,6 +16,7 @@ function Categories() {
             <ul>
                 {categories.map((e, i) =>
                     (<li
+                        key={i}
                         onClick={() => dispatch(setCategoryId(i))}
                         className={categoryId === i ? 'active' : ''}
                     >
