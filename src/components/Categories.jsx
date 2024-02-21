@@ -7,8 +7,7 @@ function Categories() {
     const categoryId = useSelector((state) => state.filterSlice.categoryId)
     const dispatch = useDispatch()
 
-    const categories = ['Все', 'Мясные', 'Вегетарианские', 'Гриль', 'Острые', 'Закрытые', 'Акции']
-
+    const categories = ['Все', 'Мясные', 'Вегетарианские', 'Гриль', 'Острые', 'Forbidden']
 
     return (
         <div className="categories">
