@@ -7,7 +7,8 @@ import PizzaBlock from "../components/PizzaBlock";
 import Pizza404 from "../assets/pizza404.json"
 import Pagination from "../components/Pagination/Pagination";
 import {SearchContext} from "../App";
-import { useSelector } from 'react-redux'
+import {useSelector} from 'react-redux'
+import axios from "axios";
 
 const Main = () => {
 
@@ -20,6 +21,7 @@ const Main = () => {
     //pizzas data and loading status
     const [items, setItems] = useState([])
     const [isLoading, setIsLoading] = useState(true)
+
 
     //pagination
     const [page, setPage] = useState(1);
@@ -44,21 +46,23 @@ const Main = () => {
 
     useEffect(() => {
             setIsLoading(true)
-            fetch(
+            axios.get(
                 `https://65d099daab7beba3d5e36950.mockapi.io/pizzas?`
                 + pageLimitProp
                 + categoryProp
                 + sortProp
                 + orderProp
             )
-                .then((res) =>
-                    res.status === 200 ? res.json() : [Pizza404])
-                .then((arr) => {
-                    setItems(arr)
-                    setIsLoading(false)
+                .then((res) => {
+                    if (res.status === 200 && res.data) {
+                        setItems(res.data)
+                        setIsLoading(false)
+                    } else {
+                        setItems([Pizza404])
+                        setIsLoading(false)
+                    }
                 })
-
-
+                .catch((err) => alert(err.response.data))
         }, [categoryId, sortType, page]
     )
 
@@ -83,11 +87,12 @@ const Main = () => {
         setPage(prev > 0 ? prev : page);
     }
 
+
     return (
         <div className='container'>
             <div className="content__top">
-                <Categories />
-                <Sort />
+                <Categories/>
+                <Sort/>
             </div>
             <h2 className="content__title">Все пиццы</h2>
             <div className="content__items">
