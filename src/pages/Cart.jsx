@@ -9,12 +9,12 @@ import EmptyCart from "./EmptyCart";
 
 const Cart = () => {
 
-    const totalPrice = useSelector((state) => state.cartSlice.totalPrice)
     const items = useSelector((state) => state.cartSlice.items)
+    const totalPrice = useSelector((state) => state.cartSlice.totalPrice)
+    const totalCount = items.reduce((sum, item) => sum + item.count, 0)
     const dispatch = useDispatch()
 
-    const totalCount = items.reduce((sum, item) => sum + item.count, 0)
-    console.log(items)
+
 
     const onClickClear = () => {
         dispatch(clearItems())

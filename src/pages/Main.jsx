@@ -3,7 +3,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import Categories from "../components/Categories";
 import Sort, {sorts} from "../components/Sort";
 import PizzaSkeleton from "../components/PizzaBlock/Skeleton";
-import PizzaBlock from "../components/PizzaBlock";
+import PizzaBlock from "../components/PizzaBlock/PizzaBlock";
 import Pizza404 from "../assets/pizza404.json"
 import Pagination from "../components/Pagination/Pagination";
 import {useDispatch, useSelector} from 'react-redux'
@@ -78,7 +78,6 @@ const Main = () => {
             })
             .catch((err) => alert(err.response.data))
     }
-    //, [categoryId, sortType, page, searchValue]
 
 
 
@@ -112,7 +111,6 @@ const Main = () => {
             isSearch.current = true;
         }
     }, []);
-
 
     // Если был первый рендер, то запрашиваем пиццы
     React.useEffect(() => {
