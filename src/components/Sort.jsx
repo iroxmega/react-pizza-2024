@@ -2,6 +2,14 @@ import {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {setSortType} from '../redux/slices/filterSlice'
 
+export const sorts = [
+    {name: 'популярности (>)', type: 'rating', order: 'desc'},
+    {name: 'популярности (<)', type: 'rating', order: 'asc'},
+    {name: 'цене (>)', type: 'price', order: 'desc'},
+    {name: 'цене (<)', type: 'price', order: 'asc'},
+    {name: 'алфавиту (>)', type: 'title', order: 'asc'},
+    {name: 'алфавиту (<)', type: 'title', order: 'desc'}
+]
 function Sort() {
     //redux toolkit
     const sortType = useSelector((state) => state.filterSlice.sortType)
@@ -9,14 +17,7 @@ function Sort() {
 
     const [isVisible, setIsVisible] = useState(false)
 
-    const sorts = [
-        {name: 'популярности (>)', type: 'rating', order: 'desc'},
-        {name: 'популярности (<)', type: 'rating', order: 'asc'},
-        {name: 'цене (>)', type: 'price', order: 'desc'},
-        {name: 'цене (<)', type: 'price', order: 'asc'},
-        {name: 'алфавиту (>)', type: 'title', order: 'asc'},
-        {name: 'алфавиту (<)', type: 'title', order: 'desc'}
-    ]
+
 
     const sortClosing = (name, type, order) => {
         setIsVisible(isVisible => !isVisible)
