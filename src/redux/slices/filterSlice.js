@@ -13,7 +13,7 @@ const initialState = {
 
 
 export const filterSlice = createSlice({
-    name: 'counter',
+    name: 'filter',
     initialState,
     reducers: {
         setSortType: (state, action) => {
@@ -48,3 +48,6 @@ export const filterSlice = createSlice({
 export const { setSortType, setCategoryId, setCurrentPage, setSearchValue, setFilters } = filterSlice.actions
 
 export default filterSlice.reducer
+
+
+
