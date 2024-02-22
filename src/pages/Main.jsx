@@ -10,10 +10,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import axios from "axios";
 import qs from "qs";
 import {useNavigate} from 'react-router-dom'
-import sort from "../components/Sort";
-
 import {setFilters} from "../redux/slices/filterSlice";
-import {current} from "@reduxjs/toolkit";
 
 const Main = () => {
 
