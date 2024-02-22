@@ -23,7 +23,7 @@ const Cart = () => {
     return (
         <div className='container container--cart'>
             <div className="cart">
-                {items
+                {items.length !== 0
                     ? (
                         <>
                             <div className="cart__top">

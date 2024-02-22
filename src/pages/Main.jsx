@@ -99,8 +99,6 @@ const Main = () => {
             const params = qs.parse(window.location.search.substring(1));
 
             const sort = sorts.find((obj) => obj.type === params.sortType && obj.order === params.order);
-            console.log(params)
-            console.log(sort)
 
             dispatch(
                 setFilters({
