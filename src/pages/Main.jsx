@@ -1,16 +1,16 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 
 import Categories from "../components/Categories";
 import Sort, {sorts} from "../components/Sort";
 import PizzaSkeleton from "../components/PizzaBlock/Skeleton";
 import PizzaBlock from "../components/PizzaBlock/PizzaBlock";
-import Pizza404 from "../assets/pizza404.json"
+import Error from "../components/Error";
 import Pagination from "../components/Pagination/Pagination";
 import {useDispatch, useSelector} from 'react-redux'
-import axios from "axios";
 import qs from "qs";
 import {useNavigate} from 'react-router-dom'
 import {setFilters} from "../redux/slices/filterSlice";
+import {fetchPizza, fetchPizzaCount} from "../redux/slices/pizzaSlice";
 
 const Main = () => {
 
@@ -20,21 +20,12 @@ const Main = () => {
     const searchValue = useSelector((state) => state.filterSlice.searchValue)
 
     //pizzas data and loading status
-    const [items, setItems] = useState([])
-    const [isLoading, setIsLoading] = useState(true)
-
+    const {items, status, totalCount} = useSelector((state) => state.pizzaSlice)
 
     //pagination
     const page = useSelector((state) => state.filterSlice.currentPage)
     const rowsPerPage = 8;
-    const [itemsCount, setItemsCount] = useState(0)
 
-    //vars for queries
-    const categoryProp = categoryId > 0 ? `&category=${categoryId}` : ''
-    const sortProp = `&sortBy=${sortType.type}`
-    const orderProp = `&order=${sortType.order}`
-    const pageLimitProp = `&p=${page}&l=${rowsPerPage}`
-    const searchQueryProp = searchValue !== '' ? `&title=${searchValue}` : ''
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -42,43 +33,29 @@ const Main = () => {
     const isMounted = useRef(false)
     const isSearch = useRef(false)
 
-    //сколько всего пицц в запросе, без учета пагинации
-    useEffect(
-        () => {
-            axios.get(`https://65d099daab7beba3d5e36950.mockapi.io/pizzas?` + categoryProp + searchQueryProp)
-                .then((res) => {
-                    if (res.status === 200 && res.data) {
-                        // console.log('с заданной категорий и поисковым запросом: ' + res.data.length + ' пицц')
-                        setItemsCount(res.data.length)
-                    }
-                })
-                .catch((err) => alert(err.response.data))
-        }, [categoryId, searchValue]
-    )
-
-    const getPizzas = () => {
-        setIsLoading(true)
-        axios.get(
-            `https://65d099daab7beba3d5e36950.mockapi.io/pizzas?`
-            + pageLimitProp
-            + searchQueryProp
-            + categoryProp
-            + sortProp
-            + orderProp
-        )
-            .then((res) => {
-                if (res.status === 200 && res.data) {
-                    // console.log(`Страница: ${page}, показано пицц: ${res.data.length} из ${itemsCount}`)
-                    setItems(res.data)
-                    setIsLoading(false)
-                } else {
-                    setItems([Pizza404])
-                    setIsLoading(false)
-                }
-            })
-            .catch((err) => alert(err.response.data))
+    const getPizzasCount = () => {
+        dispatch(fetchPizzaCount({categoryId, searchValue}))
     }
 
+    const getPizzas = () => {
+
+        dispatch(fetchPizza({
+            categoryId,
+            sortType: sortType.type,
+            sortOrder: sortType.order,
+            pageLimit: rowsPerPage,
+            page,
+            searchValue
+        }))
+    }
+
+    useEffect(() => {
+        getPizzas()
+    }, [])
+
+    useEffect(() => {
+        getPizzasCount()
+    }, [categoryId, searchValue])
 
 
     useEffect(() => {
@@ -94,7 +71,7 @@ const Main = () => {
         isMounted.current = true
     }, [categoryId, sortType, page])
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (window.location.search) {
             const params = qs.parse(window.location.search.substring(1));
 
@@ -111,7 +88,7 @@ const Main = () => {
     }, []);
 
     // Если был первый рендер, то запрашиваем пиццы
-    React.useEffect(() => {
+    useEffect(() => {
         window.scrollTo(0, 0);
 
         if (!isSearch.current) {
@@ -134,16 +111,15 @@ const Main = () => {
             </div>
             <h2 className="content__title">Все пиццы</h2>
             <div className="content__items">
-                {isLoading
-                    ? skeletonPizzas
-                    : pizzas
-                }
+                {status === 'error' && <Error/>}
+                {status === 'loading' && skeletonPizzas}
+                {status === 'success' && pizzas}
             </div>
-            <Pagination
-                items={items} //ето например лимитные 8 пицц на 3 странице
-                itemsCount={itemsCount}
-                rowsPerPage={rowsPerPage}
-            />
+            {status === 'success' &&
+                <Pagination
+                    items={items}
+                    itemsCount={totalCount}
+                    rowsPerPage={rowsPerPage}/>}
 
         </div>
     );
