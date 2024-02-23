@@ -29,17 +29,14 @@ export const cartSlice = createSlice({
         removeItem: (state, action) => {
             console.log(action.payload)
             state.items = state.items.filter(item => {
+                    if (item.id !== action.payload.id) {
+                        return true
+                    } else if (item.typeProp !== action.payload.typeProp || item.pizzaSize !== action.payload.pizzaSize) {
+                        return true
+                    }
 
-                if (item.id !== action.payload.id) {
-                    return true
+                    return false
                 }
-                else if (item.typeProp !== action.payload.typeProp || item.pizzaSize !== action.payload.pizzaSize) {
-                    return true
-                }
-
-                return false
-            }
-
             )
             state.totalPrice = state.items.reduce((sum, pizza) => pizza.price * pizza.count + sum, 0)
         },
