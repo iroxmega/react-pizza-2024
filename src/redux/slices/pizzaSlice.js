@@ -77,7 +77,7 @@ export const pizzaSlice = createSlice({
                 state.status = 'error';
                 state.items = [];
             })
-            .addCase(fetchPizzaCount.pending, (state, action) => {
+            .addCase(fetchPizzaCount.pending, (state) => {
                 state.totalCount = 0
             })
             .addCase(fetchPizzaCount.fulfilled, (state, action) => {
@@ -86,5 +86,6 @@ export const pizzaSlice = createSlice({
     },
 })
 
+export const selectPizzaData = (state) => state.pizzaSlice
 export const { setItems } = pizzaSlice.actions
 export default pizzaSlice.reducer

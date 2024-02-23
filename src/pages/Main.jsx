@@ -9,27 +9,25 @@ import Pagination from "../components/Pagination/Pagination";
 import {useDispatch, useSelector} from 'react-redux'
 import qs from "qs";
 import {useNavigate} from 'react-router-dom'
-import {setFilters} from "../redux/slices/filterSlice";
-import {fetchPizza, fetchPizzaCount} from "../redux/slices/pizzaSlice";
+import {selectFilters, selectPages, setFilters} from "../redux/slices/filterSlice";
+import {fetchPizza, fetchPizzaCount, selectPizzaData} from "../redux/slices/pizzaSlice";
 
 const Main = () => {
-
-    //redux toolkit logic
-    const categoryId = useSelector((state) => state.filterSlice.categoryId)
-    const sortType = useSelector((state) => state.filterSlice.sortType)
-    const searchValue = useSelector((state) => state.filterSlice.searchValue)
-
-    //pizzas data and loading status
-    const {items, status, totalCount} = useSelector((state) => state.pizzaSlice)
-
-    //pagination
-    const page = useSelector((state) => state.filterSlice.currentPage)
-    const rowsPerPage = 8;
-
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
+    //filters
+    const {categoryId, sortType, searchValue} = useSelector(selectFilters)
+
+    //pizzas data and loading status
+    const {items, status, totalCount} = useSelector(selectPizzaData)
+
+    //pagination
+    const page = useSelector(selectPages)
+    const rowsPerPage = 8;
+
+    //window.search params
     const isMounted = useRef(false)
     const isSearch = useRef(false)
 
@@ -56,7 +54,6 @@ const Main = () => {
     useEffect(() => {
         getPizzasCount()
     }, [categoryId, searchValue])
-
 
     useEffect(() => {
         if (isMounted.current) {
@@ -87,7 +84,6 @@ const Main = () => {
         }
     }, []);
 
-    // Если был первый рендер, то запрашиваем пиццы
     useEffect(() => {
         window.scrollTo(0, 0);
 
@@ -96,12 +92,10 @@ const Main = () => {
         }
 
         isSearch.current = false;
-    }, [categoryId, sortType, searchValue, page]);
-
+    }, [categoryId, sortType, searchValue, page]); //запрос пицц при первом рендере
 
     const pizzas = items.map(pizza => (<PizzaBlock {...pizza} />))
     const skeletonPizzas = [...new Array(8)].map((_, i) => <PizzaSkeleton key={i}/>)
-
 
     return (
         <div className='container'>
@@ -120,7 +114,6 @@ const Main = () => {
                     items={items}
                     itemsCount={totalCount}
                     rowsPerPage={rowsPerPage}/>}
-
         </div>
     );
 }

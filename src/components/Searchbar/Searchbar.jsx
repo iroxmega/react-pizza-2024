@@ -4,10 +4,10 @@ import debounce from 'lodash.debounce'
 import {setSearchValue} from "../../redux/slices/filterSlice";
 import {useDispatch} from "react-redux";
 
-function Searchbar() {
+const Searchbar = () => {
 
     const dispatch = useDispatch()
-    const [ localSearchValue, setLocalSearchValue] = useState('')
+    const [localSearchValue, setLocalSearchValue] = useState('')
     const inputRef = useRef()
 
     const closeButtonHandler = () => {
@@ -24,7 +24,6 @@ function Searchbar() {
         setLocalSearchValue(event.target.value)
         updateSearchValue(event.target.value)
     }
-
 
 
     return (

@@ -9,7 +9,7 @@ import NotFound from "./components/NotFoundBlock";
 import Main from "./pages/Main";
 import Cart from "./pages/Cart";
 
-function App() {
+const App = () => {
 
     return (
         <div className="wrapper">

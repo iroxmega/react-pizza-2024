@@ -15,8 +15,8 @@ const Header = () => {
                         </div>
                     </div>
                 </Link>
-                <Searchbar />
-                <HeaderCart />
+                <Searchbar/>
+                <HeaderCart/>
             </div>
         </div>
     )

@@ -40,7 +40,7 @@ export const cartSlice = createSlice({
             )
             state.totalPrice = state.items.reduce((sum, pizza) => pizza.price * pizza.count + sum, 0)
         },
-        clearItems: (state, action) => {
+        clearItems: (state) => {
             state.items = []
             state.totalPrice = 0
         },
@@ -60,6 +60,11 @@ export const cartSlice = createSlice({
         }
     },
 })
+
+
+
+export const selectCartData = state => state.cartSlice
+
 
 export const {addItem, removeItem, decrement, clearItems} = cartSlice.actions
 export default cartSlice.reducer
