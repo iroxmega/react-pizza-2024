@@ -3,7 +3,7 @@ import React, {createContext, useEffect, useRef, useState} from 'react';
 import Categories from "../components/Categories";
 import Sort, {sorts} from "../components/Sort";
 import PizzaSkeleton from "../components/PizzaBlock/Skeleton";
-import PizzaBlock from "../components/PizzaBlock/PizzaBlock";
+import PizzaBlock, { PizzaProps } from "../components/PizzaBlock/PizzaBlock";
 import Error from "../components/Error";
 import Pagination from "../components/Pagination/Pagination";
 import {useDispatch, useSelector} from 'react-redux'
@@ -12,6 +12,7 @@ import {useNavigate} from 'react-router-dom'
 import {selectFilters, selectPages, setFilters} from "../redux/slices/filterSlice";
 import {fetchPizza, fetchPizzaCount, selectPizzaData} from "../redux/slices/pizzaSlice";
 import {Modal} from "antd";
+import {JSX} from 'react/jsx-runtime';
 
 // export const PizzaModalContext = createContext()
 
@@ -101,7 +102,7 @@ const Main = () => {
         isSearch.current = false;
     }, [categoryId, sortType, searchValue, page]); //запрос пицц при первом рендере
 
-    const pizzas = items.map(pizza => (<PizzaBlock {...pizza} />))
+    const pizzas = items.map((pizza: JSX.IntrinsicAttributes & PizzaProps) => (<PizzaBlock {...pizza} />))
     const skeletonPizzas = [...new Array(8)].map((_, i) => <PizzaSkeleton key={i}/>)
 
     return (
