@@ -98,7 +98,6 @@ const Main = () => {
         if (!isSearch.current) {
             getPizzas();
         }
-
         isSearch.current = false;
     }, [categoryId, sortType, searchValue, page]); //запрос пицц при первом рендере
 
