@@ -4,10 +4,11 @@ import './App.css';
 import './scss/app.scss';
 
 import Header from "./components/Header";
-import NotFound from "./components/NotFoundBlock";
+import NotFound from "./components/NotFoundBlock/NotFoundBlock";
 
 import Main from "./pages/Main";
 import Cart from "./pages/Cart";
+import FullPizza from "./components/FullPizza";
 
 const App = () => {
 
@@ -16,6 +17,7 @@ const App = () => {
             <Header/>
             <div className="content">
                 <Routes>
+                    <Route path='/pizza/:id' element={<FullPizza />} />
                     <Route path='/' element={<Main/>}/>
                     <Route path='/cart' element={<Cart/>}/>
                     <Route path='*' element={<NotFound/>}/>

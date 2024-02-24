@@ -8,19 +8,20 @@ const Searchbar = () => {
 
     const dispatch = useDispatch()
     const [localSearchValue, setLocalSearchValue] = useState('')
-    const inputRef = useRef()
+    const inputRef = useRef<HTMLInputElement>(null)
 
     const closeButtonHandler = () => {
         dispatch(setSearchValue(''))
         setLocalSearchValue('')
-        inputRef.current.focus()
+        inputRef.current?.focus()
+
     }
 
     const updateSearchValue = useCallback(
         debounce((newValue) => dispatch(setSearchValue(newValue)), 750), []
     )
 
-    const searchChangeHandler = (event) => {
+    const searchChangeHandler = (event: any) => {
         setLocalSearchValue(event.target.value)
         updateSearchValue(event.target.value)
     }
@@ -38,7 +39,7 @@ const Searchbar = () => {
 
             <input
                 ref={inputRef}
-                maxLength='10'
+                maxLength={10}
                 className={styles.input}
                 value={localSearchValue}
                 onChange={(event) => searchChangeHandler(event)}

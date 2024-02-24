@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {createContext, useEffect, useRef, useState} from 'react';
 
 import Categories from "../components/Categories";
 import Sort, {sorts} from "../components/Sort";
@@ -11,8 +11,14 @@ import qs from "qs";
 import {useNavigate} from 'react-router-dom'
 import {selectFilters, selectPages, setFilters} from "../redux/slices/filterSlice";
 import {fetchPizza, fetchPizzaCount, selectPizzaData} from "../redux/slices/pizzaSlice";
+import {Modal} from "antd";
+
+// export const PizzaModalContext = createContext()
 
 const Main = () => {
+
+    // const [isOpen, setIsOpen] = useState(false);
+    // const [modalPizza, setModalPizza] = useState()
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -32,11 +38,12 @@ const Main = () => {
     const isSearch = useRef(false)
 
     const getPizzasCount = () => {
+        //@ts-ignore
         dispatch(fetchPizzaCount({categoryId, searchValue}))
     }
 
     const getPizzas = () => {
-
+        //@ts-ignore
         dispatch(fetchPizza({
             categoryId,
             sortType: sortType.type,
@@ -99,19 +106,31 @@ const Main = () => {
 
     return (
         <div className='container'>
+
+            {/*<Modal*/}
+            {/*    centered*/}
+            {/*    open={isOpen}*/}
+            {/*    onOk={() => setIsOpen(false)}*/}
+            {/*    onCancel={() => setIsOpen(false)}*/}
+            {/*>*/}
+
+            {/*</Modal>*/}
             <div className="content__top">
                 <Categories/>
                 <Sort/>
             </div>
             <h2 className="content__title">Все пиццы</h2>
-            <div className="content__items">
-                {status === 'error' && <Error/>}
-                {status === 'loading' && skeletonPizzas}
-                {status === 'success' && pizzas}
-            </div>
+
+                <div className="content__items">
+                    {/*<PizzaModalContext.Provider value={{isOpen, setIsOpen}}>*/}
+                    {status === 'error' && <Error/>}
+                    {status === 'loading' && skeletonPizzas}
+                    {status === 'success' && pizzas}
+                    {/*</PizzaModalContext.Provider>*/}
+                </div>
+
             {status === 'success' &&
                 <Pagination
-                    items={items}
                     itemsCount={totalCount}
                     rowsPerPage={rowsPerPage}/>}
         </div>

@@ -1,7 +1,11 @@
 import React from "react"
 import ContentLoader from "react-content-loader"
 
-const PizzaSkeleton = (props) => (
+type SkeletonProps = {
+    key:number
+}
+
+const PizzaSkeleton:React.FC<SkeletonProps> = (props) => (
     <div className='pizza-block-wrapper'>
         <ContentLoader
             className="pizza-block"

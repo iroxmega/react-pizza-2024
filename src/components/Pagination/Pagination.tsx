@@ -3,10 +3,15 @@ import styles from './Pagination.module.scss'
 import {useDispatch, useSelector} from "react-redux";
 import {setCurrentPage} from "../../redux/slices/filterSlice";
 
-const Pagination = ({items, itemsCount, rowsPerPage} ) => {
+type PaginatorProps = {
+    itemsCount: number,
+    rowsPerPage: number
+}
+
+const Pagination:React.FC<PaginatorProps> = ({itemsCount, rowsPerPage} ) => {
 
     //redux states
-    const currentPage = useSelector((state) => state.filterSlice.currentPage)
+    const currentPage = useSelector((state: any) => state.filterSlice.currentPage)
     const dispatch = useDispatch()
 
     const [pagesCount, setPagesCount] = useState(1)
@@ -21,7 +26,7 @@ const Pagination = ({items, itemsCount, rowsPerPage} ) => {
 
     const handleNextPageClick = () => {
         const next = currentPage + 1;
-        const total = items.length !== 0 ? pagesCount : currentPage;
+        const total = itemsCount !== 0 ? pagesCount : currentPage;
         onChangePage(next <= total ? next : currentPage);
     }
 
@@ -30,7 +35,7 @@ const Pagination = ({items, itemsCount, rowsPerPage} ) => {
         onChangePage(prev > 0 ? prev : currentPage);
     }
 
-    const onChangePage = num => {
+    const onChangePage = (num: number) => {
         console.log(currentPage)
         dispatch(setCurrentPage(num))
     }

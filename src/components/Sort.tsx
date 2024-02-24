@@ -2,7 +2,13 @@ import {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {selectFilters, setSortType} from '../redux/slices/filterSlice'
 
-export const sorts = [
+type SortItem = {
+    name: string,
+    type: 'rating' | 'price' | 'title',
+    order: 'asc' | 'desc'
+}
+
+export const sorts: SortItem[] = [
     {name: 'популярности (>)', type: 'rating', order: 'desc'},
     {name: 'популярности (<)', type: 'rating', order: 'asc'},
     {name: 'цене (>)', type: 'price', order: 'desc'},
@@ -16,17 +22,17 @@ const Sort = () => {
     const dispatch = useDispatch()
     const {sortType} = useSelector(selectFilters)
 
-    const sortRef = useRef()
+    const sortRef = useRef<HTMLDivElement>(null)
 
     const [isVisible, setIsVisible] = useState(false)
 
-    const sortClosing = (name, type, order) => {
+    const sortClosing = (obj:SortItem ) => {
         setIsVisible(isVisible => !isVisible)
-        dispatch(setSortType({name, type, order}))
+        dispatch(setSortType({...obj}))
     }
 
     useEffect(() => {
-        const handleClickOutside = (event) => {
+        const handleClickOutside = (event:any) => {
 
             if (!event.composedPath().includes(sortRef.current)) {
                 setIsVisible(false)
@@ -63,7 +69,7 @@ const Sort = () => {
                     <ul>
                         {sorts.map((sort, i) => (
                             <li key={i}
-                                onClick={() => sortClosing(sort.name, sort.type, sort.order)}
+                                onClick={() => sortClosing(sort)}
                                 className={
                                     sort.type === sortType.type
                                     && sort.order === sortType.order

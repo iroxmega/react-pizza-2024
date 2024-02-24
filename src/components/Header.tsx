@@ -2,7 +2,7 @@ import {Link} from "react-router-dom";
 import Searchbar from "./Searchbar/Searchbar";
 import HeaderCart from "./HeaderCart";
 
-const Header = () => {
+const Header = ()=> {
     return (
         <div className="header">
             <div className="container">

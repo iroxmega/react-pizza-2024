@@ -2,7 +2,19 @@ import React from 'react';
 import {useDispatch} from 'react-redux'
 import {addItem, decrement, removeItem} from "../redux/slices/cartSlice";
 
-const CartItem = ({id, title, price, imageUrl, typeProp, pizzaSize, count}) => {
+
+type PizzaCart = {
+    id: number,
+    title: string,
+    price: number,
+    imageUrl: string,
+    typeProp: string,
+    pizzaSize: number,
+    count: number
+
+}
+
+const CartItem = ({id, title, price, imageUrl, typeProp, pizzaSize, count}: PizzaCart) => {
     const dispatch = useDispatch()
 
 

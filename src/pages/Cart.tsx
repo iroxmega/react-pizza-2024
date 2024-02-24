@@ -10,7 +10,7 @@ import EmptyCart from "./EmptyCart";
 const Cart = () => {
     const dispatch = useDispatch()
     const {items, totalPrice} = useSelector(selectCartData)
-    const totalCount = items.reduce((sum, item) => sum + item.count, 0)
+    const totalCount = items.reduce((sum: number, item: any) => sum + item.count, 0)
 
     const onClickClear = () => {
         dispatch(clearItems())
@@ -41,7 +41,7 @@ const Cart = () => {
                             </div>
                             <div className="content__items">
                                 {items.map(
-                                    (item) => (
+                                    (item: any) => (
                                         <CartItem
                                             id={item.id}
                                             title={item.title}
